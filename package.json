@@ -1,0 +1,11 @@
+{
+  "name": "actor-model-elm-ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jakubea/actor-model-elm-ui",
+  "license": "MIT",
+  "dependencies": {
+    "elm-format": "^0.8.1",
+    "global": "^4.4.0"
+  }
+}
