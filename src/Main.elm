@@ -1,56 +1,48 @@
-module Main exposing (..)
+module Main exposing (Model, init, main, view)
 
-import Browser
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
-
-
----- MODEL ----
+import ActorName exposing (ActorName)
+import Bootstrap
+import Element exposing (Element)
+import Html exposing (Html)
+import Msg exposing (Msg)
+import Webbhuset.ActorSystem as System
 
 
 type alias Model =
-    {}
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( {}, Cmd.none )
-
-
-
----- UPDATE ----
-
-
-type Msg
-    = NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    ( model, Cmd.none )
-
-
-
----- VIEW ----
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
-        ]
-
-
-
----- PROGRAM ----
+    System.Model ActorName Bootstrap.Model
 
 
 main : Program () Model Msg
 main =
-    Browser.element
-        { view = view
-        , init = \_ -> init
-        , update = update
-        , subscriptions = always Sub.none
-        }
+    System.element
+        
+
+
+
+{ spawn = Bootstrap.spawn
+, apply = Bootstrap.applyModel
+, init = init
+, view = view
+, onDebug =
+    \error ->
+        Debug.log "error" error
+            |> always System.none
+}
+
+
+init : () -> Msg
+init flags =
+    [     System.withSingletonPID ActorName.Header System.addView
+     , System.spawnSingleton ActorName.Service
+     , Msg.Dummy
+         |> System.sendToSingleton ActorName.Service
+    ]
+        |> System.batch
+
+
+view : List (Element Msg) -> Html Msg
+view actorOutput =
+    Element.column
+        []
+        actorOutput
+        |> Element.layout []
