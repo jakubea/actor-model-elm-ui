@@ -15,27 +15,23 @@ type alias Model =
 main : Program () Model Msg
 main =
     System.element
-        
-
-
-
-{ spawn = Bootstrap.spawn
-, apply = Bootstrap.applyModel
-, init = init
-, view = view
-, onDebug =
-    \error ->
-        Debug.log "error" error
-            |> always System.none
-}
+        { spawn = Bootstrap.spawn
+        , apply = Bootstrap.applyModel
+        , init = init
+        , view = view
+        , onDebug =
+            \error ->
+                Debug.log "error" error
+                    |> always System.none
+        }
 
 
 init : () -> Msg
 init flags =
-    [     System.withSingletonPID ActorName.Header System.addView
-     , System.spawnSingleton ActorName.Service
-     , Msg.Dummy
-         |> System.sendToSingleton ActorName.Service
+    [ System.withSingletonPID ActorName.Header System.addView
+    , System.spawnSingleton ActorName.Service
+    , Msg.Dummy
+        |> System.sendToSingleton ActorName.Service
     ]
         |> System.batch
 
