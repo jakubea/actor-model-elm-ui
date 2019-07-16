@@ -1,4 +1,4 @@
-module Component.Product exposing
+module Component.ProductList exposing
     ( Model
     , MsgIn(..)
     , MsgOut(..)
@@ -7,29 +7,27 @@ module Component.Product exposing
 
 import Element exposing (Element)
 import Element.Background
-import Element.Border
-import Element.Font
 import Webbhuset.Component.SystemEvent as SystemEvent exposing (SystemEvent)
 import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 
 type MsgIn
     = NoIn
+    | ClickedOnProduct PID
+    | GotProduct PID
 
 
 type MsgOut
     = NoOut
-    | SendToProductList
 
 
 type alias Model =
     { pid : PID
-    , name : String
-    , price : Float
+    , children : List PID
     }
 
 
-component : Component.UI Model MsgIn MsgOut
+component : Component.Layout Model MsgIn MsgOut msg
 component =
     { init = init
     , update = update
@@ -42,12 +40,16 @@ component =
 init : PID -> ( Model, List MsgOut, Cmd MsgIn )
 init pid =
     ( { pid = pid
-      , name = "name"
-      , price = 99
+      , children = []
       }
-    , [ SendToProductList ]
+    , []
     , Cmd.none
     )
+
+
+kill : Model -> List MsgOut
+kill model =
+    []
 
 
 subs : Model -> Sub MsgIn
@@ -64,14 +66,27 @@ update msgIn model =
             , Cmd.none
             )
 
+        GotProduct pid ->
+            ( { model | children = model.children ++ [ pid ] }
+            , []
+            , Cmd.none
+            )
 
-view : Model -> Element MsgIn
-view { name } =
-    Element.row
-        [ Element.padding 10
-        , Element.centerY
-        , Element.Border.widthXY 0 2
-        , Element.Border.color <| Element.rgb255 53 74 94
-        ]
-        [ Element.text name
+        ClickedOnProduct pid ->
+            ( model
+            , []
+            , Cmd.none
+            )
+
+
+view : (MsgIn -> msg) -> Model -> (PID -> Element msg) -> Element msg
+view toSelf model renderPID =
+    Element.column
+        []
+        [ Element.el [] (Element.text "Layout Component")
+        , model.children
+            |> List.map renderPID
+            |> Element.column
+                [ Element.Background.color <| Element.rgb255 172 184 196
+                ]
         ]
