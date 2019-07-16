@@ -39,6 +39,7 @@ init flags =
 view : List (Element Msg) -> Html Msg
 view actorOutput =
     Element.column
-        []
+        [ Element.width Element.fill
+        ]
         actorOutput
         |> Element.layout []

@@ -6,6 +6,9 @@ module Component.Header exposing
     )
 
 import Element exposing (Element)
+import Element.Background
+import Element.Border
+import Element.Font
 import Webbhuset.Component.SystemEvent as SystemEvent exposing (SystemEvent)
 import Webbhuset.ElmUI.Component as Component exposing (PID)
 
@@ -20,12 +23,6 @@ type MsgOut
 
 type alias Model =
     { pid : PID }
-
-
-
---
--- Component
---
 
 
 component : Component.UI Model MsgIn MsgOut
@@ -64,7 +61,27 @@ update msgIn model =
 
 view : Model -> Element MsgIn
 view model =
-    Element.column
-        []
-        [ Element.text "Empty Component"
+    Element.row
+        [ Element.width Element.fill
+        , Element.padding 10
+        , Element.centerY
+        , Element.height <| Element.px 80
+        , Element.Background.color <| Element.rgb255 172 184 196
+        , Element.Border.widthXY 0 2
+        , Element.Border.color <| Element.rgb255 53 74 94
+        ]
+        [ Element.image
+            [ Element.width <| Element.px 30
+            , Element.height <| Element.px 30
+            , Element.alignLeft
+            ]
+            { src = "http://localhost:3000/logo.svg"
+            , description = ""
+            }
+        , Element.el
+            [ Element.centerX
+            , Element.Font.color <| Element.rgb255 53 74 94
+            ]
+          <|
+            Element.text "E-shop"
         ]
