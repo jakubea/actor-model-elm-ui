@@ -1,5 +1,6 @@
 module Bootstrap exposing (Model(..), actors, applyModel, spawn)
 
+import Actor.Cart as Cart
 import Actor.Header as Header
 import Actor.Product as Product
 import Actor.ProductList as ProductList
@@ -12,12 +13,14 @@ type Model
     = Header Header.Model
     | Product Product.Model
     | ProductList ProductList.Model
+    | Cart Cart.Model
 
 
 actors =
     { header = Header.actor Header
     , product = Product.actor Product
     , productList = ProductList.actor ProductList
+    , cart = Cart.actor Cart
     }
 
 
@@ -32,6 +35,9 @@ spawn actor =
         ActorName.ProductList ->
             actors.productList.init
 
+        ActorName.Cart ->
+            actors.cart.init
+
 
 applyModel model =
     case model of
@@ -43,3 +49,6 @@ applyModel model =
 
         ProductList m ->
             ActorSystem.applyModel actors.productList m
+
+        Cart m ->
+            ActorSystem.applyModel actors.cart m

@@ -7,6 +7,7 @@ module Component.ProductList exposing
 
 import Element exposing (Element)
 import Element.Background
+import Element.Font
 import Webbhuset.Component.SystemEvent as SystemEvent exposing (SystemEvent)
 import Webbhuset.ElmUI.Component as Component exposing (PID)
 
@@ -23,7 +24,7 @@ type MsgOut
 
 type alias Model =
     { pid : PID
-    , children : List PID
+    , products : List PID
     }
 
 
@@ -40,7 +41,7 @@ component =
 init : PID -> ( Model, List MsgOut, Cmd MsgIn )
 init pid =
     ( { pid = pid
-      , children = []
+      , products = []
       }
     , []
     , Cmd.none
@@ -67,7 +68,7 @@ update msgIn model =
             )
 
         GotProduct pid ->
-            ( { model | children = model.children ++ [ pid ] }
+            ( { model | products = model.products ++ [ pid ] }
             , []
             , Cmd.none
             )
@@ -80,10 +81,11 @@ update msgIn model =
 
 
 view : (MsgIn -> msg) -> Model -> (PID -> Element msg) -> Element msg
-view toSelf model renderPID =
-    model.children
+view toSelf { products } renderPID =
+    products
         |> List.map renderPID
         |> Element.column
             [ Element.Background.color <| Element.rgb255 227 232 237
             , Element.width Element.fill
+            , Element.Font.color <| Element.rgb255 53 74 94
             ]

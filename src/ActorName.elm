@@ -5,3 +5,4 @@ type ActorName
     = Header
     | Product
     | ProductList
+    | Cart

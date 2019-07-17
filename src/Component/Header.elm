@@ -15,7 +15,7 @@ import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 type MsgIn
     = NoIn
-    | IncreasedTotalPrice Float
+    | UpdatedTotalPrice Float
 
 
 type MsgOut
@@ -28,6 +28,7 @@ type alias Model =
     }
 
 
+component : Component.UI Model MsgIn MsgOut
 component =
     { init = init
     , update = update
@@ -55,8 +56,8 @@ subs model =
 update : MsgIn -> Model -> ( Model, List MsgOut, Cmd MsgIn )
 update msgIn model =
     case msgIn of
-        IncreasedTotalPrice totalPrice ->
-            ( { model | totalPrice = model.totalPrice + totalPrice }
+        UpdatedTotalPrice totalPrice ->
+            ( { model | totalPrice = totalPrice }
             , []
             , Cmd.none
             )
@@ -84,6 +85,7 @@ view { totalPrice } =
         , Element.Background.color <| Element.rgb255 172 184 196
         , Element.Border.widthXY 0 2
         , Element.Border.color <| Element.rgb255 53 74 94
+        , Element.Font.color <| Element.rgb255 53 74 94
         ]
         [ Element.image
             [ Element.width <| Element.px 30
@@ -95,7 +97,6 @@ view { totalPrice } =
             }
         , Element.el
             [ Element.centerX
-            , Element.Font.color <| Element.rgb255 53 74 94
             ]
           <|
             Element.text "E-shop"

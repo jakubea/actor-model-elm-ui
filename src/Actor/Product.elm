@@ -1,7 +1,7 @@
 module Actor.Product exposing (Model, actor, mapIn, mapOut)
 
 import ActorName
-import Component.Header as Header
+import Component.Cart as Cart
 import Component.Product as Product
 import Component.ProductList as ProductList
 import Msg exposing (Msg)
@@ -41,8 +41,8 @@ mapOut pid msgOut =
         Product.SendToProductList ->
             System.sendToSingleton ActorName.ProductList (Msg.ProductList <| ProductList.GotProduct pid)
 
-        Product.IncreaseTotalPrice price ->
-            System.sendToSingleton ActorName.Header (Msg.Header <| Header.IncreasedTotalPrice price)
+        Product.SendToCart { id, name, price } ->
+            System.sendToSingleton ActorName.Cart (Msg.Cart <| Cart.GotCartItem { id = id, name = name, price = price })
 
         Product.NoOut ->
             System.none

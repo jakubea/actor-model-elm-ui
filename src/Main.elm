@@ -30,26 +30,26 @@ main =
 
 init : () -> Msg
 init flags =
-    [ newProduct "product 1" 22
-    , newProduct "product 2" 365
-    , newProduct "product 3" 11
-    , newProduct "product 4" 3675
-    , newProduct "product 5" 186
-    , newProduct "product 6" 577
-    , newProduct "product 7" 36555
+    [ System.withSingletonPID ActorName.Cart System.addView
+    , newProduct 1 "Product 1" 22
+    , newProduct 2 "Product 2" 365
+    , newProduct 3 "Product 3" 11
+    , newProduct 4 "Product 4" 3675
+    , newProduct 5 "Product 5" 186
     , System.withSingletonPID ActorName.ProductList System.addView
     , System.withSingletonPID ActorName.Header System.addView
     ]
         |> System.batch
 
 
-newProduct : String -> Float -> Msg
-newProduct name price =
+newProduct : Int -> String -> Float -> Msg
+newProduct id name price =
     System.spawn ActorName.Product
         (\pid ->
             System.sendToPID pid
                 (Msg.Product <|
-                    Product.SetProduct { name = name, price = price, pid = pid }
+                    Product.SetProduct
+                        { id = id, name = name, price = price, pid = pid }
                 )
         )
 
@@ -57,7 +57,9 @@ newProduct name price =
 view : List (Element Msg) -> Html Msg
 view actorOutput =
     Element.column
-        [ Element.width Element.fill
+        [ Element.width <| Element.maximum 800 Element.fill
+        , Element.centerX
         ]
         actorOutput
-        |> Element.layout []
+        |> Element.layout
+            []

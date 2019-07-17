@@ -18,22 +18,24 @@ import Webbhuset.ElmUI.Component as Component exposing (PID)
 type MsgIn
     = NoIn
     | SetProduct Model
-    | ClickedOnProduct
+    | ClickedAddToCart
 
 
 type MsgOut
     = NoOut
     | SendToProductList
-    | IncreaseTotalPrice Float
+    | SendToCart Model
 
 
 type alias Model =
     { pid : PID
+    , id : Int
     , name : String
     , price : Float
     }
 
 
+component : Component.UI Model MsgIn MsgOut
 component =
     { init = init
     , update = update
@@ -46,6 +48,7 @@ component =
 init : PID -> ( Model, List MsgOut, Cmd MsgIn )
 init pid =
     ( { pid = pid
+      , id = 0
       , name = ""
       , price = 0
       }
@@ -68,8 +71,11 @@ update msgIn model =
             , Cmd.none
             )
 
-        ClickedOnProduct ->
-            ( model, [ IncreaseTotalPrice model.price ], Cmd.none )
+        ClickedAddToCart ->
+            ( model
+            , [ SendToCart model ]
+            , Cmd.none
+            )
 
         NoIn ->
             ( model
@@ -86,11 +92,33 @@ view { name, price } =
         , Element.Border.widthEach { bottom = 1, left = 0, right = 0, top = 0 }
         , Element.Border.color <| Element.rgb255 53 74 94
         , Element.Border.dashed
-        , Element.Events.onClick ClickedOnProduct
         , Element.width <| Element.fill
         ]
-        [ Element.el [ Element.width <| Element.fillPortion 1 ] <| Element.text name
-        , Element.el [ Element.width <| Element.fillPortion 1 ] <| Element.text <| String.fromFloat price
-        , Element.Input.button [ Element.Font.size 10 ]
-            { onPress = Just ClickedOnProduct, label = Element.text "ADD TO CART" }
+        [ Element.el [] <| Element.text name
+        , Element.el
+            [ Element.alignRight
+            , Element.paddingXY 30 0
+            ]
+          <|
+            Element.text <|
+                String.fromFloat price
+                    ++ ",-"
+        , addButtonView
         ]
+
+
+addButtonView : Element MsgIn
+addButtonView =
+    Element.Input.button
+        [ Element.Font.size 10
+        , Element.Background.color <| Element.rgb255 53 74 94
+        , Element.Font.color <| Element.rgb255 227 232 237
+        , Element.padding 10
+        , Element.Border.rounded 5
+        , Element.Border.width 2
+        , Element.Border.color <| Element.rgb255 255 255 255
+        , Element.alignRight
+        ]
+        { onPress = Just ClickedAddToCart
+        , label = Element.text "ADD TO CART"
+        }
