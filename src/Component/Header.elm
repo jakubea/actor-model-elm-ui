@@ -66,9 +66,17 @@ view : Model -> Element MsgIn
 view { totalPrice } =
     let
         totalPriceView =
-            "Total price: "
-                ++ String.fromFloat totalPrice
-                |> Element.text
+            Element.column []
+                [ Element.text "Total price:"
+                , Element.el
+                    [ Element.alignRight
+                    , Element.Font.bold
+                    , Element.paddingXY 0 5
+                    ]
+                  <|
+                    Element.text <|
+                        String.fromFloat totalPrice
+                ]
     in
     Element.row
         [ Element.width Element.fill

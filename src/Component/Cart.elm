@@ -102,13 +102,13 @@ view { cartItems } =
             [ Element.Font.color <| Element.rgb255 53 74 94
             , Element.width <| Element.maximum 300 Element.fill
             , Element.centerX
-            , Element.Font.size 12
+            , Element.Font.size 16
             ]
         <|
             (Element.el
                 [ Element.centerX
                 , Element.padding 10
-                , Element.Font.size 16
+                , Element.Font.size 20
                 ]
              <|
                 Element.text "Shopping cart"
@@ -126,8 +126,7 @@ cartItemView index { name, price } =
         [ Element.text name
         , Element.text <| String.fromFloat price ++ ",-"
         , Element.Input.button
-            [ Element.Font.size 10
-            , Element.Background.color <| Element.rgb255 53 74 94
+            [ Element.Background.color <| Element.rgb255 53 74 94
             , Element.Font.color <| Element.rgb255 227 232 237
             , Element.padding 5
             ]
