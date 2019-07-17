@@ -46,20 +46,16 @@ newProduct : Int -> String -> Float -> Msg
 newProduct id name price =
     System.spawn ActorName.Product
         (\pid ->
-            System.sendToPID pid
-                (Msg.Product <|
-                    Product.SetProduct
-                        { id = id, name = name, price = price, pid = pid }
-                )
+            Product.SetProduct { id = id, name = name, price = price, pid = pid }
+                |> Msg.Product
+                |> System.sendToPID pid
         )
 
 
 view : List (Element Msg) -> Html Msg
-view actorOutput =
+view =
     Element.column
         [ Element.width <| Element.maximum 800 Element.fill
         , Element.centerX
         ]
-        actorOutput
-        |> Element.layout
-            []
+        >> Element.layout []
