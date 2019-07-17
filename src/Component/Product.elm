@@ -8,18 +8,23 @@ module Component.Product exposing
 import Element exposing (Element)
 import Element.Background
 import Element.Border
+import Element.Events
 import Element.Font
+import Element.Input
 import Webbhuset.Component.SystemEvent as SystemEvent exposing (SystemEvent)
 import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 
 type MsgIn
     = NoIn
+    | SetProduct Model
+    | ClickedOnProduct
 
 
 type MsgOut
     = NoOut
     | SendToProductList
+    | IncreaseTotalPrice Float
 
 
 type alias Model =
@@ -29,7 +34,6 @@ type alias Model =
     }
 
 
-component : Component.UI Model MsgIn MsgOut
 component =
     { init = init
     , update = update
@@ -42,10 +46,10 @@ component =
 init : PID -> ( Model, List MsgOut, Cmd MsgIn )
 init pid =
     ( { pid = pid
-      , name = "name"
-      , price = 99
+      , name = ""
+      , price = 0
       }
-    , [ SendToProductList ]
+    , []
     , Cmd.none
     )
 
@@ -58,6 +62,15 @@ subs model =
 update : MsgIn -> Model -> ( Model, List MsgOut, Cmd MsgIn )
 update msgIn model =
     case msgIn of
+        SetProduct newModel ->
+            ( newModel
+            , [ SendToProductList ]
+            , Cmd.none
+            )
+
+        ClickedOnProduct ->
+            ( model, [ IncreaseTotalPrice model.price ], Cmd.none )
+
         NoIn ->
             ( model
             , []
@@ -66,12 +79,18 @@ update msgIn model =
 
 
 view : Model -> Element MsgIn
-view { name } =
+view { name, price } =
     Element.row
         [ Element.padding 10
         , Element.centerY
-        , Element.Border.widthXY 0 2
+        , Element.Border.widthEach { bottom = 1, left = 0, right = 0, top = 0 }
         , Element.Border.color <| Element.rgb255 53 74 94
+        , Element.Border.dashed
+        , Element.Events.onClick ClickedOnProduct
+        , Element.width <| Element.fill
         ]
-        [ Element.text name
+        [ Element.el [ Element.width <| Element.fillPortion 1 ] <| Element.text name
+        , Element.el [ Element.width <| Element.fillPortion 1 ] <| Element.text <| String.fromFloat price
+        , Element.Input.button [ Element.Font.size 10 ]
+            { onPress = Just ClickedOnProduct, label = Element.text "ADD TO CART" }
         ]

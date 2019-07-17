@@ -81,12 +81,9 @@ update msgIn model =
 
 view : (MsgIn -> msg) -> Model -> (PID -> Element msg) -> Element msg
 view toSelf model renderPID =
-    Element.column
-        []
-        [ Element.el [] (Element.text "Layout Component")
-        , model.children
-            |> List.map renderPID
-            |> Element.column
-                [ Element.Background.color <| Element.rgb255 172 184 196
-                ]
-        ]
+    model.children
+        |> List.map renderPID
+        |> Element.column
+            [ Element.Background.color <| Element.rgb255 227 232 237
+            , Element.width Element.fill
+            ]

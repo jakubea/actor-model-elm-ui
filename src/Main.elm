@@ -2,6 +2,7 @@ module Main exposing (Model, init, main, view)
 
 import ActorName exposing (ActorName)
 import Bootstrap
+import Component.Product as Product
 import Component.ProductList as ProductList
 import Element exposing (Element)
 import Html exposing (Html)
@@ -29,16 +30,22 @@ main =
 
 init : () -> Msg
 init flags =
-    [ System.withSingletonPID ActorName.Header System.addView
-
-    -- , System.spawn ActorName.Product (\pid -> System.sendToSingleton ActorName.ProductList (Msg.ProductList <| ProductList.GotProduct pid))
-    , System.spawnSingleton ActorName.Product
-    , System.spawnSingleton ActorName.Product
-    , System.spawnSingleton ActorName.Product
+    [ newProduct "product 1" 22
+    , newProduct "product 2" 365
+    , newProduct "product 3" 11
+    , newProduct "product 4" 3675
+    , newProduct "product 5" 186
+    , newProduct "product 6" 577
+    , newProduct "product 7" 36555
     , System.withSingletonPID ActorName.ProductList System.addView
-    , System.spawnSingleton ActorName.Service
+    , System.withSingletonPID ActorName.Header System.addView
     ]
         |> System.batch
+
+
+newProduct : String -> Float -> Msg
+newProduct name price =
+    System.spawn ActorName.Product (\pid -> System.sendToPID pid (Msg.Product <| Product.SetProduct { name = "product 1", price = 22, pid = pid }))
 
 
 view : List (Element Msg) -> Html Msg
