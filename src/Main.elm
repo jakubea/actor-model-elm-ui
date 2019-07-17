@@ -45,7 +45,13 @@ init flags =
 
 newProduct : String -> Float -> Msg
 newProduct name price =
-    System.spawn ActorName.Product (\pid -> System.sendToPID pid (Msg.Product <| Product.SetProduct { name = "product 1", price = 22, pid = pid }))
+    System.spawn ActorName.Product
+        (\pid ->
+            System.sendToPID pid
+                (Msg.Product <|
+                    Product.SetProduct { name = name, price = price, pid = pid }
+                )
+        )
 
 
 view : List (Element Msg) -> Html Msg
