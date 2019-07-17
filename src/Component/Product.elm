@@ -16,14 +16,12 @@ import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 
 type MsgIn
-    = NoIn
-    | SetProduct Model
+    = SetProduct Model
     | ClickedAddToCart
 
 
 type MsgOut
-    = NoOut
-    | SendToProductList
+    = SendToProductList
     | SendToCart Model
 
 
@@ -77,12 +75,6 @@ update msgIn model =
             , Cmd.none
             )
 
-        NoIn ->
-            ( model
-            , []
-            , Cmd.none
-            )
-
 
 view : Model -> Element MsgIn
 view { name, price } =
@@ -94,7 +86,7 @@ view { name, price } =
         , Element.Border.dashed
         , Element.width <| Element.fill
         ]
-        [ Element.el [] <| Element.text name
+        [ Element.text name
         , Element.el
             [ Element.alignRight
             , Element.paddingXY 30 0

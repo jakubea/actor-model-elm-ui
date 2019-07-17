@@ -14,8 +14,7 @@ import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 
 type MsgIn
-    = NoIn
-    | UpdatedTotalPrice Float
+    = UpdatedTotalPrice Float
 
 
 type MsgOut
@@ -58,12 +57,6 @@ update msgIn model =
     case msgIn of
         UpdatedTotalPrice totalPrice ->
             ( { model | totalPrice = totalPrice }
-            , []
-            , Cmd.none
-            )
-
-        NoIn ->
-            ( model
             , []
             , Cmd.none
             )

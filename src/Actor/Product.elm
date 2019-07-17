@@ -39,10 +39,9 @@ mapOut : PID -> Product.MsgOut -> Msg
 mapOut pid msgOut =
     case msgOut of
         Product.SendToProductList ->
-            System.sendToSingleton ActorName.ProductList (Msg.ProductList <| ProductList.GotProduct pid)
+            System.sendToSingleton ActorName.ProductList
+                (Msg.ProductList <| ProductList.GotProduct pid)
 
         Product.SendToCart { id, name, price } ->
-            System.sendToSingleton ActorName.Cart (Msg.Cart <| Cart.GotCartItem { id = id, name = name, price = price })
-
-        Product.NoOut ->
-            System.none
+            System.sendToSingleton ActorName.Cart
+                (Msg.Cart <| Cart.GotCartItem { id = id, name = name, price = price })

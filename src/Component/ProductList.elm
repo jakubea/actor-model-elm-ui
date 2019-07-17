@@ -13,9 +13,7 @@ import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 
 type MsgIn
-    = NoIn
-    | ClickedOnProduct PID
-    | GotProduct PID
+    = GotProduct PID
 
 
 type MsgOut
@@ -61,20 +59,8 @@ subs model =
 update : MsgIn -> Model -> ( Model, List MsgOut, Cmd MsgIn )
 update msgIn model =
     case msgIn of
-        NoIn ->
-            ( model
-            , []
-            , Cmd.none
-            )
-
         GotProduct pid ->
             ( { model | products = model.products ++ [ pid ] }
-            , []
-            , Cmd.none
-            )
-
-        ClickedOnProduct pid ->
-            ( model
             , []
             , Cmd.none
             )

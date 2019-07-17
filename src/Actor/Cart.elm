@@ -35,10 +35,5 @@ mapIn appMsg =
 
 
 mapOut : PID -> Cart.MsgOut -> Msg
-mapOut pid msgOut =
-    case msgOut of
-        Cart.UpdateTotalPrice price ->
-            System.sendToSingleton ActorName.Header (Msg.Header <| Header.UpdatedTotalPrice price)
-
-        _ ->
-            System.none
+mapOut pid (Cart.UpdateTotalPrice price) =
+    System.sendToSingleton ActorName.Header (Msg.Header <| Header.UpdatedTotalPrice price)

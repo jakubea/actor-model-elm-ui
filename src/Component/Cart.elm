@@ -15,14 +15,12 @@ import Webbhuset.ElmUI.Component as Component exposing (PID)
 
 
 type MsgIn
-    = NoIn
-    | GotCartItem CartItem
+    = GotCartItem CartItem
     | ClickedRemove Int
 
 
 type MsgOut
-    = NoOut
-    | UpdateTotalPrice Float
+    = UpdateTotalPrice Float
 
 
 type alias CartItem =
@@ -66,12 +64,6 @@ subs model =
 update : MsgIn -> Model -> ( Model, List MsgOut, Cmd MsgIn )
 update msgIn model =
     case msgIn of
-        NoIn ->
-            ( model
-            , []
-            , Cmd.none
-            )
-
         GotCartItem cartItem ->
             let
                 updatedModel =
